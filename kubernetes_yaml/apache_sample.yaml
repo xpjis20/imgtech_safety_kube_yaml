@@ -1,0 +1,52 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: safety-deployment-apache
+  namespace: ris-cnusafety
+  labels:
+    app: safety-deployment-apache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+       app: safety-app-apache
+  template:
+    metadata:
+      labels:
+        app: safety-app-apache
+    spec:
+      containers:
+      - image: xpjis20/imgtech_safety_apache:latest
+        imagePullPolicy: Always
+        name: apache-safety
+        resources:
+          requests:
+            memory: "1024Mi"
+            cpu: "300m"
+          limits:
+            memory: "2048Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+          protocol: TCP
+      restartPolicy: Always
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-svc-np-apache
+  namespace: ris-cnusafety
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 31112
+  clusterIP: 10.110.130.14
+  selector:
+    app: safety-app-apache

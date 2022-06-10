@@ -1,0 +1,65 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: safety-deployment-tomcat
+  namespace: ris-cnusafety
+  labels:
+    app: safety-deployment-tomcat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+       app: safety-app-tomcat
+  template:
+    metadata:
+      labels:
+        app: safety-app-tomcat
+    spec:
+      containers:
+      - image: xpjis20/imgtech_safety_tomcat:latest
+        imagePullPolicy: Always
+        name: tomcat-safety
+        resources:
+          requests:
+            memory: "2024Mi"
+            cpu: "300m"
+          limits:
+            memory: "4048Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8009
+          protocol: TCP
+        volumeMounts:
+        - name: websourcevol
+          mountPath: "/usr/local/tomcat/webapps"
+          readOnly: false
+      volumes:
+      - name: websourcevol
+        hostPath:
+          path: "/var/lib/tomcat"
+      restartPolicy: Always
+
+      
+--- # 이놈들은 이걸로 구분을 하는듯.
+#여기는 NodePort 서비스 띄우는 샘플 
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-svc-np-tomcat
+  namespace: ris-cnusafety
+spec:
+  type: NodePort
+  ports:
+  - name: tomcat
+    port: 8009
+    targetPort: 8009
+    nodePort: 31111
+  - name: ssh
+    port: 2222
+    targetPort: 2222
+    nodePort: 31114
+  clusterIP: 10.110.130.15
+  selector:
+    app: safety-app-tomcat
+

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: safety-deployment-mariadb
+  namespace: ris-cnusafety
+  labels:
+    app: safety-deployment-mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+       app: safety-app-mariadb
+  template:
+    metadata:
+      labels:
+        app: safety-app-mariadb
+    spec:
+      containers:
+      - image: xpjis20/imgtech_safety_mariadb:latest
+        imagePullPolicy: Always
+        name: mariadb-safety
+        resources:
+          requests:
+            memory: "2048Mi"
+            cpu: "600m"
+          limits:
+            memory: "4096Mi"
+            cpu: "800m"
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+        volumeMounts:
+        - name: dbdatavol
+          mountPath: "/var/lib/mysql"
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          value: qwer1234!
+        - name: MARIADB_DATABASE
+          value: safety_cnu
+        - name: MARIADB_USER
+          value: cnu
+        - name: MARIADB_PASSWORD
+          value: qwer1234!
+      volumes:
+      - name: dbdatavol
+        hostPath:
+          path: "/db/safetydb/data"
+      restartPolicy: Always
