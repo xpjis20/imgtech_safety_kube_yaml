@@ -1,0 +1,23 @@
+
+[Unit]
+
+Description=imgtech_safety
+
+
+
+[Service]
+
+Type=simple
+
+User=root
+
+ExecStart=/usr/local/src/dock_run_apach_tomcat.pl #이웃폴더에 perl 스크립트 참조
+
+
+[Install]
+
+WantedBy=default.target
+
+# 해당 파일을 /etc/systemd/system/ 에 넣음
+# systemctl enable safety_tomcat / 서비스 등록
+# reboot 때리면 실행될거임.
