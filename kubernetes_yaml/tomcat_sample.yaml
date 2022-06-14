@@ -31,10 +31,15 @@ spec:
         - containerPort: 8009
           protocol: TCP
         volumeMounts:
+        - name: tz-seoul
+          mountPath: /etc/localtime
         - name: websourcevol
           mountPath: "/usr/local/tomcat/webapps"
           readOnly: false
       volumes:
+      - name: tz-seoul
+        hostPath:
+        path: /usr/share/zoneinfo/Asia/Seoul
       - name: websourcevol
         hostPath:
           path: "/var/lib/tomcat"
