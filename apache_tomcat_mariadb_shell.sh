@@ -127,13 +127,16 @@ if [ "$CommandResult" == "" ]; then
 
 fi
 
-
+sudo systemctl restart apache2
+sudo systemctl status apache2
+sudo systemctl restart tomcat
+sudo systemctl status tomcat
 sudo systemctl restart mariadb
+sudo systemctl status mariadb
 
 echo $JAVA_HOME
 echo $CATALINA_HOME
 echo $CLASSPATH_HOME
-
 
 netstat -ntlop
 
