@@ -102,6 +102,7 @@ if [ ! -e $FILE ]; then
     echo ";;" >> /etc/init.d/tomcat
     echo "esac" >> /etc/init.d/tomcat
     echo "exit 0" >> /etc/init.d/tomcat
+    sleep 5
     sudo systemctl enable tomcat
 fi
 
@@ -129,6 +130,7 @@ fi
 
 sudo systemctl restart apache2
 sudo systemctl status apache2
+sudo systemctl enable tomcat
 sudo systemctl restart tomcat
 sudo systemctl status tomcat
 sudo systemctl restart mariadb
