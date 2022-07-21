@@ -82,29 +82,67 @@ CommandResult=`sed -n -e '/JAVA_HOME/p' /etc/profile`
 echo $CommandResult
 #echo "JAVA_HOME 이미 존재함, path export 로직 skip"
 
-FILE="/etc/init.d/tomcat"
+
+#FILE="/etc/init.d/tomcat"
+#
+#if [ ! -e $FILE ]; then
+#    touch /etc/init.d/tomcat
+#    chmod 755 /etc/init.d/tomcat
+#    echo "#!/bin/bash" >> /etc/init.d/tomcat
+#    echo "case \$1 in" >> /etc/init.d/tomcat
+#    echo "start)" >> /etc/init.d/tomcat
+#    echo "sh /usr/local/tomcat/bin/startup.sh" >> /etc/init.d/tomcat
+#    echo ";;" >> /etc/init.d/tomcat
+#    echo "stop)" >> /etc/init.d/tomcat
+#    echo "sh /usr/local/tomcat/bin/shutdown.sh" >> /etc/init.d/tomcat
+#    echo ";;" >> /etc/init.d/tomcat
+#    echo "restart)" >> /etc/init.d/tomcat
+#    echo "sh /usr/local/tomcat/bin/shutdown.sh" >> /etc/init.d/tomcat
+#    echo "sleep 2" >> /etc/init.d/tomcat
+#    echo "sh /usr/local/tomcat/bin/startup.sh" >> /etc/init.d/tomcat
+#    echo ";;" >> /etc/init.d/tomcat
+#    echo "esac" >> /etc/init.d/tomcat
+#    echo "exit 0" >> /etc/init.d/tomcat
+#    sleep 5
+#    sudo systemctl enable tomcat
+#fi
+#
+
+
+
+FILE="/etc/systemd/system/tomcat.service"
+
 
 if [ ! -e $FILE ]; then
-    touch /etc/init.d/tomcat
-    chmod 755 /etc/init.d/tomcat
-    echo "#!/bin/bash" >> /etc/init.d/tomcat
-    echo "case \$1 in" >> /etc/init.d/tomcat
-    echo "start)" >> /etc/init.d/tomcat
-    echo "sh /usr/local/tomcat/bin/startup.sh" >> /etc/init.d/tomcat
-    echo ";;" >> /etc/init.d/tomcat
-    echo "stop)" >> /etc/init.d/tomcat
-    echo "sh /usr/local/tomcat/bin/shutdown.sh" >> /etc/init.d/tomcat
-    echo ";;" >> /etc/init.d/tomcat
-    echo "restart)" >> /etc/init.d/tomcat
-    echo "sh /usr/local/tomcat/bin/shutdown.sh" >> /etc/init.d/tomcat
-    echo "sleep 2" >> /etc/init.d/tomcat
-    echo "sh /usr/local/tomcat/bin/startup.sh" >> /etc/init.d/tomcat
-    echo ";;" >> /etc/init.d/tomcat
-    echo "esac" >> /etc/init.d/tomcat
-    echo "exit 0" >> /etc/init.d/tomcat
+    touch /etc/systemd/system/tomcat.service
+    chmod 755 /etc/systemd/system/tomcat.service
+        echo "[Unit]" >> /etc/systemd/system/tomcat.service
+        echo "Description=tomcat8" >> /etc/systemd/system/tomcat.service
+        echo "After=syslog.target network.target" >> /etc/systemd/system/tomcat.service
+        echo "" >> /etc/systemd/system/tomcat.service
+        echo "[Service]" >> /etc/systemd/system/tomcat.service
+        echo "Type=forking" >> /etc/systemd/system/tomcat.service
+        echo "" >> /etc/systemd/system/tomcat.service
+        echo "Environment="JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64/"" >> /etc/systemd/system/tomcat.service
+        echo "Environment="JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64/"" >> /etc/systemd/system/tomcat.service
+        echo "Environment="CATALINA_HOME=/usr/local/tomcat"" >> /etc/systemd/system/tomcat.service
+        echo "Environment="CATALINA_BASE=/usr/local/tomcat"" >> /etc/systemd/system/tomcat.service
+        echo "" >> /etc/systemd/system/tomcat.service
+        echo "ExecStart=/usr/local/tomcat/bin/startup.sh" >> /etc/systemd/system/tomcat.service
+        echo "ExecStop=/usr/local/tomcat/bin/shutdown.sh" >> /etc/systemd/system/tomcat.service
+        echo "" >> /etc/systemd/system/tomcat.service
+        echo "User=root" >> /etc/systemd/system/tomcat.service
+        echo "Group=root" >> /etc/systemd/system/tomcat.service
+        echo "UMask=0007" >> /etc/systemd/system/tomcat.service
+        echo "RestartSec=10" >> /etc/systemd/system/tomcat.service
+        echo "" >> /etc/systemd/system/tomcat.service
+        echo "[Install]" >> /etc/systemd/system/tomcat.service
+        echo "WantedBy=multi-user.target" >> /etc/systemd/system/tomcat.service
     sleep 5
     sudo systemctl enable tomcat
 fi
+
+
 
 sudo systemctl start tomcat
 sudo systemctl restart tomcat
