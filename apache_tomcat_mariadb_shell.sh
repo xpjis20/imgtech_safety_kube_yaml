@@ -174,11 +174,17 @@ sudo systemctl status tomcat
 sudo systemctl restart mariadb
 sudo systemctl status mariadb
 
+mkdir /home/
+mkdir /home/safety/www
+chmod 755 -R /home/safety/www
+
 echo $JAVA_HOME
 echo $CATALINA_HOME
 echo $CLASSPATH_HOME
 
 netstat -ntlop
+
+
 
 ufw enable
 ufw allow 22
