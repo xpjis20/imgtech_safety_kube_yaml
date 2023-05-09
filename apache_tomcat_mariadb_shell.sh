@@ -33,7 +33,8 @@ sed -i -e 's/DocumentRoot \/var\/www\/html/DocumentRoot \/home\/safety\/www\n   
 if [ ! -e $FILE ]; then
 
 echo "tomcat 설치"
-    wget https://mirror.navercorp.com/apache/tomcat/tomcat-8/v8.5.81/bin/apache-tomcat-8.5.81.tar.gz
+    wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.88/bin/apache-tomcat-8.5.88-fulldocs.tar.gz
+    #wget https://mirror.navercorp.com/apache/tomcat/tomcat-8/v8.5.81/bin/apache-tomcat-8.5.81.tar.gz
     tar xvf apache-tomcat-8.5.81.tar.gz
     cp -rf apache-tomcat-8.5.81 /usr/local/tomcat
         
